@@ -1,0 +1,22 @@
+---
+// src/components/Footer.astro
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-stone-200 bg-white">
+  <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-stone-500">
+    <p>&copy; {year} Demo Astro Site. All rights reserved.</p>
+    <p>
+      Built with
+      <a
+        href="https://www.cosmicjs.com/docs"
+        class="text-amber-700 hover:underline"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Cosmic
+      </a>
+      &amp; Astro
+    </p>
+  </div>
+</footer>

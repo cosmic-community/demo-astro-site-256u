@@ -1,0 +1,75 @@
+---
+export interface Props {
+  page: any; // TODO: Define proper type
+}
+
+// src/pages/[slug].astro
+import Layout from '../layouts/Layout.astro';
+import { getPages, getMetafieldValue } from '../../lib/cosmic';
+import type { Page } from '../../types';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  const pages = await getPages();
+  return pages.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props as Props;
+
+const imageUrl = page.metadata?.featured_image?.imgix_url;
+const author = getMetafieldValue(page.metadata?.author);
+const seoDescription = getMetafieldValue(page.metadata?.seo_description);
+const publishedAt = page.metadata?.published_at || page.created_at;
+const formattedDate = publishedAt
+  ? new Date(publishedAt).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : '';
+
+const contentMarkdown = page.metadata?.content || page.content || '';
+const contentHtml = contentMarkdown ? (marked.parse(contentMarkdown) as string) : '';
+---
+
+<Layout
+  title={`${page.title} — Demo Astro Site`}
+  description={seoDescription || page.title}
+  image={imageUrl}
+>
+  <article class="max-w-3xl mx-auto px-6 py-16">
+    <header class="mb-10">
+      <h1 class="text-4xl md:text-5xl font-display font-bold text-stone-900 mb-4 leading-tight">
+        {page.title}
+      </h1>
+      {(author || formattedDate) && (
+        <div class="flex items-center gap-3 text-sm text-stone-500">
+          {author && <span class="font-medium text-stone-700">{author}</span>}
+          {author && formattedDate && <span>&bull;</span>}
+          {formattedDate && <time datetime={publishedAt}>{formattedDate}</time>}
+        </div>
+      )}
+    </header>
+
+    {imageUrl && (
+      <div class="aspect-[16/9] rounded-2xl overflow-hidden mb-10 bg-stone-100">
+        <img
+          src={`${imageUrl}?w=1600&h=900&fit=crop&auto=format,compress`}
+          alt={page.title}
+          width="1600"
+          height="900"
+          class="w-full h-full object-cover"
+        />
+      </div>
+    )}
+
+    <div class="prose-custom" set:html={contentHtml} />
+  </article>
+</Layout>

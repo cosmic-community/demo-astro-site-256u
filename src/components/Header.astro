@@ -1,0 +1,51 @@
+---
+// src/components/Header.astro
+import { getPages } from '../../lib/cosmic';
+
+const pages = await getPages();
+const currentPath = Astro.url.pathname;
+
+function isActive(path: string): boolean {
+  if (path === '/') return currentPath === '/';
+  return currentPath === path || currentPath.startsWith(`${path}/`);
+}
+---
+
+<header class="sticky top-0 z-40 backdrop-blur bg-stone-50/80 border-b border-stone-200">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="/" class="text-xl font-display font-bold tracking-tight text-stone-900">
+      Demo Astro Site
+    </a>
+    <nav class="flex items-center gap-6 text-sm font-medium">
+      <a
+        href="/"
+        aria-current={isActive('/') ? 'page' : undefined}
+        class={`hover:text-amber-700 transition-colors ${
+          isActive('/') ? 'text-amber-700' : 'text-stone-600'
+        }`}
+      >
+        Home
+      </a>
+      <a
+        href="/blog"
+        aria-current={isActive('/blog') ? 'page' : undefined}
+        class={`hover:text-amber-700 transition-colors ${
+          isActive('/blog') ? 'text-amber-700' : 'text-stone-600'
+        }`}
+      >
+        Blog
+      </a>
+      {pages.map((page) => (
+        <a
+          href={`/${page.slug}`}
+          aria-current={isActive(`/${page.slug}`) ? 'page' : undefined}
+          class={`hover:text-amber-700 transition-colors ${
+            isActive(`/${page.slug}`) ? 'text-amber-700' : 'text-stone-600'
+          }`}
+        >
+          {page.title}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>

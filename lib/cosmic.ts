@@ -2,9 +2,9 @@ import { createBucketClient } from '@cosmicjs/sdk';
 import type { Post, Page } from '../types';
 
 export const cosmic = createBucketClient({
-  bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
-  readKey: process.env.COSMIC_READ_KEY as string,
-  writeKey: process.env.COSMIC_WRITE_KEY as string,
+  bucketSlug: import.meta.env.COSMIC_BUCKET_SLUG as string,
+  readKey: import.meta.env.COSMIC_READ_KEY as string,
+  writeKey: import.meta.env.COSMIC_WRITE_KEY as string,
 });
 
 // Simple error helper for Cosmic SDK

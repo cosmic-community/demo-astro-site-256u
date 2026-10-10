@@ -9,7 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "type-check": "astro check",
-    "prebuild": "bun run type-check",
+    "prebuild": "astro check",
     "postbuild": "node scripts/inject-console-capture.js"
   },
   "dependencies": {

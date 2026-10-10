@@ -17,7 +17,7 @@ const {
   image,
 } = Astro.props;
 
-const bucketSlug = process.env.COSMIC_BUCKET_SLUG as string;
+const bucketSlug = (import.meta.env.COSMIC_BUCKET_SLUG as string) || '';
 ---
 
 <!DOCTYPE html>
